@@ -20,13 +20,11 @@
 \studyline{Tietotekniikka}
 \avainsanat{%
   lohkoketju,
-  älysopimus,
   konsensus-algoritmi,
   lohkoketjujen ongelmat
   }
 \keywords{
     blockchain,
-    smart contract,
     consensus algorithm,
     blockchains problems
 }
@@ -40,7 +38,7 @@
 \author{Niko Sihvo}
 \contactinformation{\texttt{niko.m.sihvo@student.jyu.fi}}
 % use a separate \author command for each author, if there is more than one
-\supervisor{Unsupervised work}
+\supervisor{Tuomo Rossi}
 % use a separate \supervisor command for each supervisor, if there
 % is more than one
 
@@ -66,7 +64,7 @@
 
 \chapter{Johdanto}
 
-Lohkoketjuteknologiat ovat saaneet viime vuosina huomatttavan suosion, varsinkin kryptovaluuttojen muodossa. Lohkoketjuteknologiaa voidaan käyttää muihinkin kuin finanssialan toimiin, kuten logistiikkaan. 
+Lohkoketjuteknologiat ovat saaneet viime vuosina huomattavan suosion, varsinkin kryptovaluuttojen muodossa. Lohkoketjuteknologiaa voidaan käyttää muihinkin kuin finanssialan toimiin, kuten logistiikkaan. 
 Ideaalisessa tilanteessa lohkoketjut puoltaisi hajautettua, läpinäkyvää sekä demokraattisempaa internettiä.
 
 Luvussa \ref{Lohkoketju} tarkastellaan lohkoketjun toimintaperiaatteita ja miten lohkoketjut on saanut lähtönsä.
@@ -78,8 +76,8 @@ Lopuksi luvussa \ref{Haasteet} käydään läpi lohkoketjujen kohtaamia haasteit
 \chapter{Lohkoketju}\label{Lohkoketju}
 \section{Historia}
 
-Lohkoketjuteknologian perusajatus on lähtöisin 80- ja 90-luvun vaihteesta, jolloin Leslie Lambort kehitti Paxos protokollan. 
-Tutkielmassa kuvaillaan konsensusmalli, missä verkko tietokoneita voivat tulla yhteisymmärrykseen epäluotettavassa ympäristössä.
+Lohkoketjuteknologian perusajatus on lähtöisin 80- ja 90-luvun vaihteesta, jolloin Leslie Lamport kehitti Paxos protokollan. 
+Tutkielmassa kuvaillaan konsensusmalli, missä verkko tietokoneita voivat tulla yhteisymmärrykseen epäluotettavassa ympäristössä \parencite{lamport2019part}. 
 Vuonna 1991 otettiin käyttöön allekirjoitettu tietoketju elektronisena kirjanpitona dokumenttien digitaalisessa allekirjoittamisessa. Tietoketjusta nähtiin helposti kuka on muokannut dokumenttia digitaalisena jälkenä.
 
 Nämä kaksi konseptia sovellettiin yhteen luoden ensimmäisen lohkoketjusovelluksen Bitcoinin. Bitcoin esiteltiin Satoshi Nakamoton artikkelissa \parencite{nakamoto2008bitcoin}.
@@ -95,28 +93,39 @@ Bitcoin on myös ensimmäisiä menestyneitä lohkoketjusovelluksia.
   \label{fig:Lohkoketju}
 \end{figure}
 
-\cite{yaga2019blockchain} määritelee tiivistetysti lohkoketjun seuraavasti. Lohkoketjut ovat hajautettja digitaalisia tilikirjoja, mitkä sisältävät kryptograafisesti allekirjoitettuja transaktioita, jotka ovat ryhmitetty lohkoihin. Jokainen lohko on kryptograafisesti linkitetty edelliseen, mikä tekee lohkosta peukaloinnilta vapaan, validoinnin ja konsensus-algoritmin jälkeen. Kun uusia lohkoja liitetään ketjuun, vanhoja lohkoja on entistä vaikeampi muokata. Uudet lohkot toisinnetaan lohkoketjuverkon kopioiden kanssa ja mahdolliset konfliktit ratkaistaan automaattisesti käyttäen luotuja sääntöjä.
+Lohkoketjut ovat hajautettuja digitaalisia tilikirjoja, jotka sisältävät lohkoihin ryhmiteltyjä kryptograafisesti allekirjoitettuja transaktioita \parencite{yaga2019blockchain}.
+Jokainen lohko on linkitetty kryptograafisesti edelliseen validoinnin ja konsensuksen jälkeen lohkoon, mikä tekee lohkoista peukaloinnilta vapaan.
+Kun uusia lohkoja liitetään ketjuun, vanhoja lohkoja on entistä vaikeampi muokata. 
+Uudet lohkot toisinnetaan lohkoketjuverkon kopioiden kanssa ja mahdolliset konfliktit ratkaistaan automaattisesti käyttäen luotuja sääntöjä.
+
+% Tee kaavio prosessista tähän
 
 Lohkoketjun ensisijainen hyöty on mahdollistaa suorat transaktiot käyttäjien välillä ilman kolmansia osapuolia \parencite{yaga2019blockchain}.
-Lohkoketjuissa yleisesti palkitkaan käyttäjiä, jotka julkaisevat uusia lohkoja ketjuun ja ylläpitää tilikirjan kopiota. Tälläisiä käyttäjiä kutsutaan louhijoiksi.
+Lohkoketjuissa yleisesti palkitkaan louhijoita eli käyttäjiä, ketkä julkaisevat uusia lohkoja ketjuun ja ylläpitävät tilikirjan kopiota.
 Louhijoiden automatisoitu maksu mahdollistaa systeemin hajautetun hallinnon ilman kolmansia osapuolia.
 Tämä lohkoketjujärjestelmän käyttäjien itsevalvottu mekanismi, konsensus-algoritmi, vakuuttaa, että vain validit transaktiot ja lohkot lisätään lohkoketjuun.
-Lohkoketjujen käyttö mahdollistaa tilan, missä yksittäinen käyttäjä ei ohjaa elektronista rahaa eikä järjestelmässä ole yksittäistä epäonnistumispistettä.
+Lohkoketjujen käyttäminen mahdollistaa tilan, missä yksittäinen käyttäjä ei ohjaa transaktiota eikä järjestelmässä ole yksittäistä epäonnistumispistettä.
 
-Bitcoinissa käyttäjät ovat pseudoanonyymeja, mutta heidän käyttäjätunnisteet eivät ole, lisäksi kaikki transaktiot ovat julkisia. Koska lohkoketjutsovellukset ovat yleensä salattuja, on olennaista olla mekanismit luottamuksen luotiin ympäristössä, jossa käyttäjiä ei voi tunnistaa suoraan. 
-\parencite{yaga2019blockchain}
-Ennen lohkoketjuja, käyttäjien välinen luottamus toteutettiin molempien osapuolien luottaman välikäden kautta, kuten pankki.
-Ilman luotettavia välikäsiä, lohkoketjussa luottamus luodaan seuraavan neljän avainominaisuuden kautta \parencite{zarrin2021blockchain}.
+Yleisesti käyttäjät ovat pseudoanonyymeja, mutta heidän käyttäjätunnisteet eivät ole. 
+Lisäksi kaikki transaktiot ovat julkisia. 
+Koska lohkoketjutsovellukset ovat yleensä salattuja, on olennaista olla keinot luottamuksen luotiin ympäristössä, jossa käyttäjiä ei voi tunnistaa suoraan. 
+Käyttäjä ei voi olla täysin anonyymi kuluttujansuojalakien takia \parencite{yaga2019blockchain}.
+Perinteisesti käyttäjien välinen luottamus toteutetaan molempien osapuolien luottaman välikäden, kuten pankki, kautta.
+Ilman luotettavia välikäsiä, lohkoketjussa luottamus luodaan seuraavan neljän avainominaisuuden kautta \parencite{zarrin2021blockchain}:
+
+\begin{itemize}
+
+\item Hajautus, missä jokainen lohkoketjuverkossa tehdyt transaktiot tehdään vain kahden noden välillä kerrallaan ilman kolmansia osapuolia. Hajautuminen mahdollistaa lohkoketjujen käytön ilman riippumattomia keskitettyjä viranomaisia. Tällöin jokaisella nodella on periaatteessa yhtäläiset äänestysoikeudet lohkoketjuverkossa
+
+\item Muuttumattomuus viittaa siihen että transaktio täytyy validoida luotetuilla louhijoilla. Muuttumattomuus vakuuttaa, että nodeihin tallennetut tilikirjat pysyy absoluuttisina eikä niitä pysty poistamaan.
 
 
-Hajautus, missä jokainen lohkoketjuverkossa tehdyt transaktiot tehdään vain kahden noden välillä kerrallaan ilman kolmansia osapuolia. Hajautuminen mahdollistaa lohkoketjujen käytön ilman riippumattomia keskitettyjä viranomaisia. Tällöin jokaisella nodella on periaatteessa yhtäläiset äänestysoikeudet lohkoketjuverkossa.
+\item Anonymiteetti, viittaa jokaisen louhijan generoituun osoitteeseen uniikkina indentiteettinä. Vaikka kaikki lohkoketjut ei ole anonyymeja kokonaan ja jotkut harjoittaa pseudoanonymiteettiä, kuten Bitcoin ja Ethereum, missä osoitteet generoidaan jokaisessa lohkoketjun transaktiossa. 
 
-Muuttumattomuus, mikä viittaa siihen että transaktio täytyy validoida luotetuilla louhijoilla. Muuttumattomuus vakuuttaa, että nodeihin tallennetut tilikirjat pysyy absoluuttisina eikä niitä pysty poistamaan.
+\item Tarkastettavuus, missä jokaisella transaktiolla on oma viite lohkoketjussa, mikä on myös tallennettu lohkoketjun nodeihin. Näitä viitteitä käytetään jokaisen varmennetun transaktion aktivointiin ja jäljittämiseen lohkoketjussa. Näin jokaisesta transaktiosta jää merkki lohkoketjuverkkoon.
+ 
+ \end{itemize}
 
-Anonymiteetti, joka viittaa jokaisen louhija generoitua osoitetta uniikkina indentiteettinä.
-Vaikka kaikki lohkoketjut ei ole anonyymeja kokonaan ja jotkut harjoittaa pseudo-anonymiteettiä, kuten Bitcoin ja Ethereum, missä osoitteet generoidaan jokaisessa lohkoketjun transaktiossa. 
-
-Tarkastettavuus, missä jokaisella transaktiolla on oma viite lohkoketjussa, mikä myös tallennetaan lohkoketjun nodeihin. Näitä viitteitä käytetään jokaisen varmennetun transaktion aktivointiin ja jäljittämiseen lohkoketjussa. Näin jokaisesta transaktiosta jää merkki lohkoketjuverkkoon.
 
 \section{Komponentit}
 Lohkoketjut sisältävät kolme pakollista pääkomponenttia, jotka ovat DLT, muuttumaton tilikirja ja konsensus-algoritmit \parencite{zarrin2021blockchain}.
@@ -131,34 +140,43 @@ Muuttumattomassa tilikirjassa käytetään salausfunktiota tilikirjojen eheyden 
 Muuttumattomuus takaa etteivät muut välikädet pysty muokkaamaan transaktioiden sisältöä.
 
 Konsensus-algoritmeja käytetään saavuttamaan yhteisymmärrys nodejen välillä, kun yritetään lisätä uutta lohkoa lohkoketjun loppuun.
-Konsensus-algoritmi moderoi lohkoketjua sanelemalla nodeja kuinka päästä yhteisymmärrykseen ja päivittää lohkoketjuverkkoa. Lisää konsensus-algoretmeista luvusssa 5. 
+Konsensus-algoritmi moderoi lohkoketjua sanelemalla nodeja kuinka päästä yhteisymmärrykseen ja päivittää lohkoketjuverkkoa. Lisää konsensus-algoretmeista luvusssa 5.
+
+\section{Tiivistefunktio}
+Lohkoketjut käyttävät tiivistefunktioita lohkojen ketjuttamiseen ja tiedon salaukseen. Jokaisella lohkolla on tiiviste osoitteena, mikä on generoitu lohkon sisällön mukaan. 
+Tiiviste on yksisuuntainen kryptografinen funktio.
+Tiivistefunktio ottaa yleisesti rajattoman määrän syötettä ja tulostaa lopulta tietyn pituisen merkkijonon. Jokainen tuloste on uniikki tietylle syötteelle.
+Jos syötettä muutetaan merkilläkin, niin tuloste muuttuu täysin.
+Täten jos lohkon sisältöä muuttaa, osoite muuttuu myös, mikä tekee validoiduista lohkoista muuttumattomia.
+
 
 \section{Kategoriat}
 Lohkoketjut voidaan kategorisoida kahteen joukkoon, luvattomiin ja luvallisiin.
 
-Luvaton lohkoketjuverkko on kaikille avoin hajauttettu tilikija alusta. 
+Luvaton lohkoketjuverkko on kaikille avoin hajauttettu tilikirja-alusta. 
 Jokainen käyttäjä pystyy liittämään uuden lohkon lohkoketjuun ilman ylempien tahojen lupaa. Yleisesti luvattomat lohkoketjut on avointa lähdekoodia.
-Koska kaikilla luvattoman lohkoketjun käyttäjillä on lupa kirjoittaa lohkoketjuun on heillä myös oikeus lukea lohkoketjua myös.
+Koska kaikilla luvattoman lohkoketjun käyttäjillä on lupa kirjoittaa lohkoketjuun on heillä myös oikeus lukea lohkoketjua.
 Koska jokainen käyttäjä voi julkaista lohkoja luvattomassa lohkoketjussa, haitalliset käyttäjät voivat yrittää julkaista valheellista dataa lohkoketjuun.
-Tosin konsensus-algoritmit vaikeuttavat haitallisten käyttäjien yrityksiä korruptoida lohkoketjua huomattavasti.
-Luvaton lohkoketjuverkko kannustaa yleensä ilkivallattomaan toimintaan palkitsemalla lohkojen julkaisijoille lohkoketjun omaa kryptovaluutta.
+Konsensus-algoritmi vaikeuttaa haitallisten käyttäjien yrityksiä korruptoida lohkoketjua huomattavasti.
+Luvaton lohkoketjuverkko kannustaa yleensä ilkivallattomaan toimintaan palkitsemalla lohkojen julkaisijoita lohkoketjun omalla kryptovaluutalla.
 
-Luvallisissa vain tietyt käyttäjät voivat liittää lohkoja lohkoketjuun jonkun hajautetun tai keskitetyn viranomaisen toimesta.
-Koska vain luvansaaneet käyttäjät ylläpitävät lohkoketjua, on mahdollista rajoittaa luku- ja kirjoitusoikeuksia.
-Luvallisissa lohkoketjuverkkoissa on samat ominaisuudet kuin luvattomassa lohkoketjussa.
-Luvallinen lohkoketju käyttää myös konsensus algoritmeja lohkojen julkaisemiseen, mutta yleensä käytössä ei ole yhtä raskaita algoritmeja, koska luvallisen lohkoketjun käyttäjillä on luottamusta toisiinsa. Luottamus perustuu sihhen että käyttäjät ovat luvan ylemmältä taholta lohkoketjuun.
+Luvallisissa ketjuissa vain valitut käyttäjät voivat liittää lohkoja lohkoketjuun hajautetun tai keskitetyn viranomaisen toimesta.
+Koska vain luvan saaneet käyttäjät ylläpitävät lohkoketjua, on mahdollista rajoittaa luku- ja kirjoitusoikeuksia.
+Luvallisissa lohkoketjuverkoissa on samat ominaisuudet kuin luvattomassa lohkoketjussa.
+Luvalliset lohkoketjut käyttävät siis myös konsensus-algoritmeja lohkojen liittämiseen, mutta yleensä käytössä ei ole yhtä raskaita algoritmeja, koska luvallisen lohkoketjun käyttäjillä on luottamusta toisiinsa. Luottamus perustuu siihen että käyttäjät ovat saaneet luvan lohkoketjuun ylemmältä taholta.
 
 \section{Tyypit}
 
+Lohkoketjun tyypin voi jakaa kolmeen joukkoon, julkinen, hybridi sekä yksityinen. Lohkoketjun tyyppi määrittelee ketkä osallistuvat varmennukseen ja konsensusprosessiin.
 
 %\subsection{Julkinen lohkoketju}
 Julkisessa lohkoketjussa jokainen osallistuja osallistuu lohkoketjun varmennukseen ja konsensusprosessiin. Julkinen lohkoketju on yleisesti luvaton lohkoketju, missä nodet voivat liittyä lohkoketjuun ilman erillisiä lupia. Nodeilla on täydet oikeudet lukea lohkoketjua ja kirjoittaa julkiseen lohkoketjuun.
 
 %\subsection{Hybridilohkoketju}
-Hybridilohkoketjussa vain valitut nodet julkisen tai yksityisen lohkoketjun haarasta pystyvät käsittelemään lohkoketjun varmennuksen ja konsensus prosessin. Hybridilohkoketju luokitellaan luvalliseksi lohkoketjuksi, koska se hyödyntää samaa logiikkaa todentamisessa, jossa vain rajatulla määrällä nodeja on luku- ja kirjoitusoikeudet.
+Hybridilohkoketjussa vain valitut nodet julkisen tai yksityisen lohkoketjun haarasta pystyvät käsittelemään lohkoketjun varmennuksen ja konsensusprosessin. Hybridilohkoketju luokitellaan luvalliseksi lohkoketjuksi, koska se hyödyntää samaa logiikkaa todentamisessa, jossa vain rajatulla määrällä nodeja on luku- ja kirjoitusoikeudet.
 
 %\subsection{Yksityinen lohkoketju}
-Yksityinen lohkoketju käyttää yksityisiä nodeja organisaatiossa tai ryhmästä, joka on rajattu julkisuudelta, lohkoketjun varmennukseen ja konsensusprosessiin. Noden oikeuksia pystytään rajaamaan siten että node ei pysty osallistumaan molempiin prosesseihin, vaikka node kuuluisikin samaan organisaatioon tai ryhmään.  Yksityinen lohkoketju on luvallinen lohkoketju, mikä toimii samalla periaatteella valittujen nodejen kanssa kuten hybridilohkoketju. Se miten yksityinen lohkoketju eroaa hybridilohkoketjusta on siten että hybridilohkoketjussa nodet vahvistetaan useiden eri ryhmien toimesta, kun taas yksityisessä lohkoketjussa noden vahvistaa yksittäinen ryhmä, kuten organisaatio.
+Yksityinen lohkoketju käyttää yksityisiä nodeja organisaatiossa tai ryhmästä, joka on rajattu julkisuudelta, lohkoketjun varmennukseen ja konsensusprosessiin. Noden oikeuksia pystytään rajaamaan siten että node ei pysty osallistumaan molempiin prosesseihin, vaikka node kuuluisikin samaan organisaatioon tai ryhmään.  Yksityinen lohkoketju on luvallinen lohkoketju, mikä toimii samalla periaatteella valittujen nodejen kanssa kuten hybridilohkoketju. Se miten yksityinen lohkoketju eroaa hybridilohkoketjusta on siten että hybridimallissa nodet vahvistetaan useiden eri ryhmien toimesta, kun taas yksityisessä lohkoketjussa noden vahvistaa yksittäinen ryhmä, kuten organisaatio.
 
 \begin{table}[ht]\centering
   \begin{tabular}{llll}
@@ -181,9 +199,16 @@ Yksityinen lohkoketju käyttää yksityisiä nodeja organisaatiossa tai ryhmäst
 Älysopimus on 1990 luvulla Nick Szabon esittelmä tietokoneprotokolla. Älysopimukset ovat ohjelmoituja sopimuslausekkeita, jotka toteutetaan, kun ennalta määritellyt ehdot täyttyvät.
 Lohkoketjut mahdollistivat älysopimuksien käytön uudella tavalla, jossa sopimukset toteutetaan lohkoketjun päällä.
 Jokainen älysopimuksessa suoritettu transaktio tallennetaan muuttumattomana lohkoketjuun, mikä tekee transaktioista jäljitettäviä ja peruuttamattomia. 
-Älysopimuksen elinkaari jakautuu neljään kohtaan. Luontiin, käyttöönottoon, suorittamiseen ja toteutumiseen.
+%Älysopimuksen elinkaari jakautuu neljään kohtaan. Luontiin, käyttöönottoon, suorittamiseen ja toteutumiseen.
+
+% Tee kaavio
 
 \chapter{Konsensus-algoritmit}\label{Konsensus}
+
+
+Konsensus-algoritmi vaikuttaa lohkoketjun suorituskykyyn, hajautuvuuteen ja turvallisuuteen merkittävästi.
+Konsensus-algoritmit voidaan jakaa kahteen joukkoon, todistus- ja äänestyspohjaisiin konsensus-algoritmeihin. 
+Taulukko \ref{tbl:konsensus} sisältää listan konsensus-algoritemeista, jotka sopisivat parhaiten hajautetun internet käyttöön. 
 
 \begin{table}[ht]\centering
   \begin{tabular}{lllll}
@@ -235,65 +260,71 @@ Jokainen älysopimuksessa suoritettu transaktio tallennetaan muuttumattomana loh
     \bottomrule
   \end{tabular}
   \caption{Konsensus-algoritmit. \cite{zarrin2021blockchain} - CC BY 4.0 - Muokattu}
-  \label{tbl:cmdchange}
+  \label{tbl:konsensus}
 \end{table}
 
-Hyvä lohkoketju on riippuvainen hyvästä konsensus-algoritmista.
-Tarjolla on useita erilaisia konsensus-algoritmeja ja uusia kehitetään kokoajan. 
-Konsensus-algoritmit voidaan jakaa kahteen joukkoon, todistus- ja äänestyspohjaisiin konsensus-algoritmeihin.
-Taulukko 1 sisältää listan konsensus-algoritemeista, jotka sopisivat hajautetun internet käyttöön. 
-
-
 \section{Todistuspohjainen konsensus}
-Todistuspohjaisessa konsensuksessa nodet kilpailevat keskenään laskemalla ja ratkaisemalla kryptograafista ongelmaa. 
-Se joka ratkaisee ongelman saa luvan laajentaa lohkoketjua.
-Lohkoketjun laajentamisen jälkeen alkaa uudelleen kryptografisen ongelman ratkominen.
+Todistuspohjaisissa konsensuksissa nodet kilpailevat keskenään laskemalla ja ratkaisemalla kryptograafista ongelmaa.
+Se node, joka ratkaisee ongelman saa luvan laajentaa lohkoketjua.
+Lohkon lisäyksen jälkeen alkaa uudelleen kryptografisen ongelman ratkominen.
 Luvattomat lohkoketjut käyttävät yleensä todistuspohjaista konsensus algoritmia.
 
 %\subsection{PoW - Proof-of-Work}
 Proof-of-Work (PoW) on peräisin kryptovaluutoista, kuten Bitcoin ja Etherium. PoW algoritmi käyttää laskentatehoa kilpailuun, jossa nodet laskevat matemaattisia ongelmia. 
 Kun joku node saa ratkaistua kierroksen ongelman, node saa palkinnoksi luoda uuden lohkon ketjuun ja yleisesti kryptovaluuttaa. Uusi kierros alkaisi, lisäten lohkoketjun pituutta rajattomasti. PoW algoritmin heikkous on sen energian kulutus ja suuren laskentatehon tarve. 
-Ongelman haastavuus riippuu lohkoketjun saatavilla olevan laskentatehon mukaan ja lohkoketjun pituus vaikuttaa suhteellisesti työmäärään myös.
+Ongelman haastavuus riippuu lohkoketjun saatavilla olevan laskentatehon mukaan myös lohkoketjun pituus vaikuttaa suhteellisesti työmäärään.
 
 %\subsection{PoAH - Proof-of-Authentication}
-PoAh poistaa tarpeen käänteiselle tiivestefunktiolle, luoden energiatehokkaan lohkon todentamismetodin. PoAH:n todentamisprosessi varmentaisi lohkon ja lohkon alkuperän.
+Proof-ofAuthentication (PoAh) poistaa tarpeen käänteiselle tiivestefunktiolle, luoden energiatehokkaan lohkon todentamismetodin. PoAH:n todentamisprosessi varmentaisi lohkon ja lohkon alkuperän.
 Node saisi täten luottamuspisteitä jokaisesta suoritetusta varmistetusta transaktiosta. Luottamusarvo on PoAh konsensus-algoritmin ydinosa.
 
 %\subsection{PoP - Proof-of-Property}
-PoP on kevyt ja skaalautuva konsensus protokolla, mikä tarjoaa todistuksen tietorakenteiden ominaisuuksille. Tämä todistus on sidottu noden uniikkeihin osoitteisiin. Todistus tallentaa lohkoketjun tilan jokaiseen uuteen luotuun lohkoon. PoP on energiatehokas todistuksien arkitehtuurin takia, mikä vähentää nodejen tarvitseman informaation määrää transaktioiden toteuttamiseen.
+Proof-of-Property (PoP) on kevyt ja skaalautuva konsensusprotokolla, mikä tarjoaa todistuksen tietorakenteiden ominaisuuksille. Tämä todistus on sidottu noden uniikkeihin osoitteisiin. Todistus tallentaa lohkoketjun tilan jokaiseen uuteen luotuun lohkoon. PoP on energiatehokas todistuksien arkitehtuurin takia, mikä vähentää nodejen tarvitseman informaation määrää transaktioiden toteuttamiseen.
 
 \section{Bysanttinen äänestyskonsensus}
-Bysanttiset äänestyskonsensukset perustuu siihen että node voi epäonnistua ja palauttaa virheellisiä viestejä järjestelmään ja käyttäjälle. 
-Bysanttiset äänestyskonsensukset ottavat konsensuksessa huomioon valheelliset viestit tai äänet äänestysprosessissa.
+Bysanttiset äänestyskonsensukset perustuu siihen että node voi epäonnistua sekä lähettämään virheellisiä viestejä järjestelmään ja käyttäjälle. 
+Bysanttiset äänestyskonsensukset ottavat konsensuksessa huomioon virheelliset viestit tai äänet äänestysprosessissa.
 
 %\subsection{PBFT - Practical Byzantine fault tolerance}
-PBFT tarvitsee kaikkien nodejen osallistumisen konsensusprosessiin.
-PBFT pääseen konsensukseen, kun 2/3 kaikista nodeista on äänestänyt.
+Practical Byzantine fault tolerance (PBFT) tarvitsee kaikkien nodejen osallistumisen konsensusprosessiin.
+PBFT:ssä konsensukseen päästään, kun 2/3 kaikista nodeista on äänestänyt samaa konsensusta.
 Täten PBFT tarjoaa korkea suoritustehon, matalan latenssin, vähäisen energiankulutuksen verrattuna PoW konsensus-algoritmiin.
-PBFT sisältää skaalautuvuus ongelman luvattomassa lohkoketjussa sen aiheuttaman korkean tietoverkkorasituksen takia sekä sisältää matalan toleranssin väärinkäytölle.
+PBFT sisältää skaalautuvuusongelman luvattomassa lohkoketjussa sen aiheuttaman korkean tietoverkkorasituksen takia sekä sisältää matalan toleranssin väärinkäytölle.
 
 %\subsection{dBFT - Delegated Byzantine fault tolerance}
-dBFT toimii lähen samalla tavalla kuin PBFT, mutta ei tarvitse kaikkien nodejen osallistumista äänestysprosessiin. Täten dBFT skaalautuu paremmin kuin edeltäjänsä PBFT.
+Delegated Byzantine fault tolerance (dBFT) toimii lähes samalla tavalla kuin PBFT, mutta ei tarvitse kaikkien nodejen osallistumista äänestysprosessiin. Täten dBFT skaalautuu paremmin kuin edeltäjänsä PBFT.
 dBFT algoritmissa tiettyjä nodeja valitaan edustamaan muita tai ryhmää nodeja.
 Vaikka dBFt skaalautuu paremmin tietoverkoissa, niin sen suuri latenssi estää uusien lohkojen luomisen tehokkaasti.
 
 %\subsection{SCP \& ripple - Stellar concensus protocol}
-SCP käyttää PBFT varianttia, missä nodeilla on "vapaus" luottaa toisiin nodeihin. Tämä luottamuksen "vapautta" käytetään konsensukseen pääsemisen prosessissa.
-SCP tarjoaa korkeaa suoritustehoa ja vähäistä energiakulutusta, mutta kärsii tietoverkko rasitteesta mikä nostaaa latensseja huomattavasti. 
+Stellar concensus protocol (SCP) käyttää PBFT-varianttia, missä nodeilla on vapaus luottaa toisiin nodeihin. Tämä luottamuksen vapautta käytetään konsensukseen pääsemisen prosessissa.
+SCP tarjoaa korkeaa suoritustehoa ja vähäistä energiakulutusta, mutta kärsii tietoverkkorasitteesta, joka nostaa latenssia huomattavasti. 
 
-Ripple on jalostettu versio SCP, missä latenssia on madallettu huomattavasti. Vaikka Ripple keskittyy ratkaisemaan latenssiongelman, Ripple on suunniteltu rahallisiin tarkoituksiin.
+Ripple on SCP:ta vastaava algoritmi, missä latenssia on saatu madallettua huomattavasti. Vaikka Ripple keskittyy ratkaisemaan latenssiongelmaa, Ripple on tarkoitettu rahallisiin tarkoituksiin, jolloin se ei sovi .
 
 \section{Törmäys äänestyskonsensus}
 
-Törmäykseen perustuvat algoritmit ovat bysanttilaisten algoritmien alakategoria, joka ohittaa törmäyksen epäonnistumisen. Törmäysalgoritmissa otetaan huomioon epäonnistuneet nodet. Erona bysanttilaisiin algoritmeihin, törmäysalgoritmit eivät pysty ylläpitämään 100\% törmäystoleranssia.
+Törmäykseen perustuvat algoritmit ovat bysanttilaisten algoritmien alakategoria, joka ohittaa törmäyksen epäonnistumisen. Törmäysalgoritmissa otetaan huomioon epäonnistuneet nodet. Erona bysanttilaisiin algoritmeihin on se, että törmäysalgoritmit eivät pysty ylläpitämään 100\% törmäystoleranssia.
 
 %\subsection{Paxos}
-Paxos on erittäin teoreettinen konsensusalgoritmi, minkä takia Paxosta on vaikea ymmärtää ja panna käytäntöön \parencite{andrey2019review}.
-Paxos algoritmilla on 50\% törmäyssietokyky \parencite{panda2019study}.
+Paxos on erittäin teoreettinen konsensusalgoritmi, minkä takia Paxosta on vaikea ymmärtää ja toteuttaa käytännössä \parencite{andrey2019review}.
+Paxos-algoritmilla on 50\% törmäyssietokyky \parencite{panda2019study}.
 Paxos on alunperin suunniteltu pienille suljetuille tietoverkoille. Tämän takia Paxos ei oikein sovellu internetkäyttöön.
-Paxos algoritmin äänestys ja ankkurointi järjestelmä olisivat tietoturvallinen ominaisuus nykyiselle internetille. 
-Paxos algoritmi perustuu kahteen päärooliin, johtajaan ja äänestäjiin. Yksinkertaisettuna äänestäjät valitsevat johtajan ja johtaja vastaan ottaa käyttäjien ehdotuksia.
-Paxos algoritmin suurin ongelma on makaa johtajassa, joka hallitsee äänestäjiä. Tämä ongelma tekee Paxos algoritmista keskitetyn tapaisen, huolimatta mahdollisuudesta toteuttaa Paxos algoritmia hajautetulla tavalla.
+Toisaalta Paxos-algoritmin äänestys- ja ankkurointijärjestelmä voisivat olla tietoturvallisia ominaisuuksia internetille. 
+Paxos perustuu kahteen päärooliin, ehdottajaan ja äänestäjiin. Yksinkertaisettuna äänestäjät valitsevat ehdottajan ja ehdottaja vastaanottaa käyttäjien ehdotuksia.
+Paxos-algoritmin suurin ongelma on makaa ehdottajassa, joka hallitsee äänestäjiä. Tämä ongelma tekee Paxos-algoritmista keskitetyn tapaisen, huolimatta mahdollisuudesta toteuttaa Paxos algoritmia hajautetulla tavalla. Kaaviossa \ref{fig:Paxos} on ilman virheitä tapahtunut yksinkertaistettu Paxos-algoritmin tilakaavio.
+
+
+Raft-algoritmi yrittää tehdä Paxos algoritmista lähestyttävämmän ja helpommin ymmärrettävän. Raft saavuttaa saman suoritustehon Paxos, mutta pienemmällä 40\% törmäystoleranssilla \parencite{panda2019study}. 
+Koska Raft on arkitehtuuriltaa samanlainen kuin Paxos, Raft sisältää saman keskitetyn hallitsevan johtajan ongelman.
+
+\section{Käytettävyyden tarkastelu}
+Parhaimmat vaihtoehdot hajautetulle internetille ovat PoP, Paxos ja PoAh konsensusalgoritmit \parencite{zarrin2021blockchain}. 
+PoP tarvitsee vähän muistia ja laskentatehoa.
+PoP-algoritmilla on yhteys semanttiseen teknologiaan tarjoamalla identiteetteja datarakenteiden ominaisuuksille.
+Paxos on toinen hyvä vaihtoehto sovellettavuuden takia. Paxos algoritmia adaptoitu moniin erilaisiin järjestelmiin, mikä tekee Paxos-algoritmista hyvämaineisen uudelleenkohdennukseen.
+Vaikka Paxos-algoritmin protokollaa ja toteutettavuutta on vaikea ymmärtää. Jotta Paxos olisi hyvä vaihtoehto hajautetulle internetille, tulisi algoritmia kehittää lohkoketjuja varten.
+PoAH täyttää hajautetun internetin kriteerit olemalla vakaa, skaalautuva ja tarpeeksi tietoturvallinen. PoAH-algoritmin luottamusjärjestelmä on tehokas työväline luotettavien nodejen luomiseen samalla pitäen nodet samanarvoisina järjestelmässä
 
 \begin{figure}[h]\centering
   \includegraphics[height=6cm,keepaspectratio]{PaxosDiag}
@@ -301,24 +332,13 @@ Paxos algoritmin suurin ongelma on makaa johtajassa, joka hallitsee äänestäji
   \label{fig:Paxos}
 \end{figure}
 
-Raft algoritmi yrittää tehdä Paxos algoritmista lähestyttävämmän ja helpommin ymmärrettävän. Raft saavuttaa saman suoritustehon Paxos, mutta pienemmällä törmäystoleranssilla \parencite{panda2019study}. 
-Koska Raft on arkitehtuuriltaa samanlainen kuin Paxos, Raft sisältää saman keskitetyn hallitsevan johtajan ongelman.
-
-\section{Käytettävyyden tarkastelu}
-Parhaimmat vaihtoehdot hajautetulle internetille ovat PoP, Paxos ja PoAh konsensus algoritmit \parencite{zarrin2021blockchain}. 
-PoP tarvitsee vähän muistia ja laskentatehoa.
-PoP algoritmilla on yhteys semanttiseen teknologiaan tarjoamalla identiteetteja datarakenteiden ominaisuuksille.
-Paxos on toinen hyvä vaihtoehto sovellettavuuden takia. Paxos algoritmia adaptoitu moniin erilaisiin järjestelmiin, mikä tekee Paxos algoritmista hyvämaineisen uudelleenkohdennukseen.
-Vaikka Paxosen protokollaa ja toteutettavuutta on vaikea ymmärtää. Jotta olisi hyvä vaihtoehto, tulisi algoritmia muokata lohkoketjuja varten.
-PoAH algoritmi täyttää hajautetun internetin kriteerit olemassa vakaa, skaalautuva ja tarpeeksi tietoturvallinen. PoAH algoritmin luottamusjärjestelmä on tehokas työväline luotettavien nodejen luomiseen samalla pitäen nodet samanarvoisina järjestelmässä.
-
 \chapter{Lohkoketjujen haasteet}\label{Haasteet}
 
 \section{Hallinto ja sääntely}
-Jos lohkoketjut otetaan globaalisti käyttöön, keskitetyt regulaatiojärjestöt, kuten hallinnoillisetjärjestöt ja kansainväliset korporaatiot eivät pysty hallitsemaan lohkoketjuihin perustuvia aktiviteetteja. \parencite{wright2015decentralized}
+Jos lohkoketjut otetaan globaalisti käyttöön, keskitetyt regulaatiojärjestöt, kuten hallinnoilliset järjestöt ja kansainväliset korporaatiot eivät pysty hallitsemaan lohkoketjuihin perustuvia aktiviteetteja \parencite{wright2015decentralized}.
 Koska lohkoketjuilla ei ole tiettyä lokaatiota ja jokainen node voi olla eri geologisten toimivaltojen alaisuudessa ja täten heitä voi koskea eri lait. 
-Kun ei ole keskitettyä hallintoa jokaiselle hajautetulle tilikirjalle, jolloin alueelliset regulaatiot muodostovat ongelman. \parencite{cermeno2016blockchain}
-Olisi hyvä perustaa kansainväliset standardit lohkoketjujen terminologille, yhteentoimivuudelle, käyttäjän yksityisyydelle, tietoturvalle, käyttäjäidentiteetille, hallinnolle ja riskejä sisältäviin ongelmiin, milloin ihmiset saisivat enemmän luottoa lohkoketjuihin perustuviin yrityksiin \parencite{ali2019blockchain}.
+Koska ei ole keskitettyä hallintoa jokaiselle hajautetulle tilikirjalle, alueelliset regulaatiot muodostovat ongelman \parencite{cermeno2016blockchain}.
+Olisi hyvä perustaa kansainväliset standardit lohkoketjujen terminologille, yhteentoimivuudelle, käyttäjän yksityisyydelle, tietoturvalle, käyttäjäidentiteetille, hallinnolle ja riskejä sisältäviin ongelmiin, jolloin ihmiset saisivat enemmän luottoa lohkoketjuihin perustuviin yrityksiin \parencite{ali2019blockchain}.
 
 \section{GDPR}
 
@@ -332,19 +352,19 @@ Käyttäjän on saada yrityksen poistamaan kaikki käyttäjään liittyvät tied
 Jos käyttäjä arvioi dataansa, käyttäjän tulee pystyä rajoittomaan pääsyä tietoihinsa  arvioinin ajaksi.
 Käyttäjän tulee pystyä vastustamaan datansa käyttöä, jos käyttäjä on erimieltä joidenkin automatisoitujen valintojen kanssa joihin käyttäjä sisältyy.
 
-GDRP määrittelee kaksi määritelmää, rekisterinpitäjä ja tietojen käsittelijä, mitkä vaativat erityista huolellisuutta kun työskennellään lohkoketjuprojektien parissa. Molemman määritelmät liittyvät käyttäjän tietojen käsittelyyn käyttäjän luvalla.
-Rekisterinpitäjä on se joka asettaa tietojenkäsittelylle tarkoitusperät ja keinot. Tietojenkäsittelijät taas ovat niitä henkilöitä tai yrityksiä, jotka käsittelevät käyttäjätietoja rekisterinpitäjän puolesta. Rekisterinpitäjällä ja tietojekäsittelijällä välillä tulee olla selkeä sopimus, jossa selitetään molempien osapuolien roolit ja funktiot.
+GDRP määrittelee kaksi määritelmää, rekisterinpitäjä ja tietojenkäsittelijä, mitkä vaativat erityista huolellisuutta kun työskennellään lohkoketjuprojektien parissa. Molemman määritelmät liittyvät käyttäjän tietojen käsittelyyn käyttäjän luvalla.
+Rekisterinpitäjä on se joka asettaa tietojenkäsittelylle tarkoitusperät ja keinot. Tietojenkäsittelijät taas ovat niitä henkilöitä tai yrityksiä, jotka käsittelevät käyttäjätietoja rekisterinpitäjän puolesta. Rekisterinpitäjällä ja tietojekäsittelijällä välillä tulee olla selkeä sopimus, jossa selitetään molempien osa\-puolien roolit ja funktiot.
 Hajautetussa lohkoketjuympäristössä on tärkeä kysymys liittyy siihen kuka saa olla rekisterinpitäjä ja kuka tietojenkäsittelijä.
 
-GDPR asettama oikeus tulla unohdetuksi -säädös aiheuttaa haassteita, koska käyttäjän tiedot on tallennettu lohkoketjussa useaan eri nodeen, ja täten yrityksen on vaikea ellei lähes mahdotonta poistaa data. On kuitenkin ehdotettu yhdeksi ratkaisuksi on kryptata jokainen lohkoketjun tallennus avainpareilla ja sisällyttää kryptattutieto lohkoketjuun. Tällöin poistamalla vastaava avain, kellään ei ole pääsyä kyseiseen lohkonsisältöön. Kuintenkaan kaikkialla ei ole juridisesti hyväksytty tämän kaltaista "poistamista". \parencite{ali2019blockchain}
+GDPR:n asettama oikeus tulla unohdetuksi -säädös aiheuttaa haasteita, koska käyttäjän tiedot on tallennettu lohkoketjussa useaan eri nodeen, ja täten yrityksen on vaikea ellei lähes mahdotonta poistaa data. On kuitenkin ehdotettu yhdeksi ratkaisuksi kryptata jokainen lohkoketjun tallennus avainpareilla ja sisällyttää kryptattu tieto lohkoketjuun. Poistamalla vastaava avain, kellään ei ole pääsyä kyseiseen lohkonsisältöön. Kuitenkaan kaikkialla ei ole juridisesti hyväksytty tämän kaltaista "poistamista". \parencite{ali2019blockchain}
 
 \section{Skaalautuvuus}
-Skaalautuvuus on yksi isoimmista lohkoketjuteknologioiden ongelmista. Skaalautuvuus ongelma voidaan jakaan kahteen osaan, transaktioiden tehokkuuteen ja tilantarpeeseen.
+Skaalautuvuus on yksi isoimmista lohkoketjuteknologioiden ongelmista. Skaalautuvuusongelma voidaan jakaan kahteen osaan, transaktioiden tehokkuuteen ja muistin tarpeeseen.
 
 Lohkoketjusovellukset ovat yleensä itsehallittuja ja hyväksyvät transaktiolohkoja satunnaisin väliajoin.
 Suoritusteho tälläisissä lohkoissa perustuu useinmiten lohkojen aikaväleihin ja lohkon maksimikokoon.
 Lohkojen kasvattaminen tarkoittaa korkeampaa transaktioiden suoritustehoa, mutta samalla se tarkoittaa, että suuremmat lohkot tarvitsevat enemmän aikaa saavuttaakseen verkon nodet, aiheuttaen suuremman latenssin lohkojen sisällyttämiseen ja konsensus-algoritmeihin.
-Toisaalta latenssi pienentyisi pienimmällä lohkon lisäysintervalilla, mutta tämä aiheuttaisi  enemmän erehdyksiä konsensus järjestelmässä.
+Toisaalta latenssi pienentyisi pienimmällä lohkon lisäysintervalilla, mutta tämä aiheuttaisi  enemmän erehdyksiä konsensusjärjestelmässä.
 
 Lohkonkoon skaalautuvuuden lisäksi nodejen muistin määrä skaalautuvuus on ongelma. Transaktioiden nopeus on suorassa yhteydessä osallistuvien nodejen muistin määrään.
 Mitä enemmän nodeja liittyy lohkoketjuverkkoon sitä enemmän todennäköisesti transaktioita tullaan tekemään ja nodet tulee tarvitsemaan täten enemmän muistia.
@@ -358,20 +378,20 @@ Koska hajautettu muisti on lohkoketjuille tyypillinen ominaisuus, muistinodeille
 \section{Suorituskyky}
 Lohkoketjuteknologiat sisältävät useita suorituskykyyn liittyviä ongelmia, mitkä tekevät lohkoketjusta hitaan ja skaalautumattoman isoja transaktioita varten.
 Ensimmäinen ongelma on älysopimukset. Älysopimuksissa on ongelmana niiden tehoton tiedonsiirto nodejen välillä. Myös se ettei pystytä ottaan käyttöön mielivaltaisia ohjelmia, jotka olisivat rajoitettu tiettyjen lohkojen muuttumattomuudella \parencite{yang2019survey}.
-Toinen ongelma on lohkoketjun haarauttaminen, jossa eriävä haara muodostetaan lohkoketjusta, missä kyseisen lohkoketjun lohkoja louhutaan samanaikaisesti monien nodejen toimesta \parencite{da2019analysis}. 
+Toinen ongelma on lohkoketjun haarauttaminen, jossa eriävä haara muodostetaan lohkoketjusta, missä kyseisen lohkoketjun lohkoja louhitaan samanaikaisesti monien nodejen toimesta \parencite{da2019analysis}. 
 Haarautus aiheittaa verkkoon viivettä yli 1000 s \parencite{mivsic2019forks}.
 Haarautus sisältää myös tietoturvariskin, missä uuteen ketjuun, joka on luotu haarasta, pystytään upottamaan takaportteja \parencite{wang2019corking}.
-Kolmas ongelma aiheuttaa pullonkaulan suorituskyvyssä. Pullonkaula aiheutuu lohkokoon seitsemään rajatusta transaktion pitkästä varmennusajasta \parencite{yang2019survey}.
+Kolmas suorituskyvyllinen ongelma johtuu transaktioiden pitkästä varmennusajasta, mikä aiheutuu seitsemään rajatusta lohkokoosta \parencite{yang2019survey}.
 
 
 \section{Tietoturvallisuus}
-Vaikka lohkoketjujen transaktiot ovat suunnitellusti tietoturvallisia, yksityisyys pysyy huolen aiheena.
-Lohkoketjuteknologioita ollaan pidetty yksityisyyden säilöjänä ja saanut hyvät arvostelut kyseisessa kontekstissä \parencite{de2016interplay}.
-Kuitenkin kolmannen osapuolen web jäljittäjät ovat havainnnoineet kryptovaluuttojen deanonymisoituja käyttäjiä. Jäljittäjät hakevat käyttäjän identiteetin ja ostohistorian verkkokaupoista. Yleensä jäljittäjillä on tarpeeksi tietoa, jotta pystyvät tunnistamaam tietyn transaktion käyttäjän identiteetin mukana. 
-Yleisesti uskotaan että lohkoketju on turvallinen, koska transaktiot suoritetaan generoiduilla osoitteilla kuin oikeilla identiteeteillä.
+Vaikka lohkoketjujen transaktiot ovat arkitehtuurillisesti tietoturvallisia, yksityisyys pysyy huolen aiheena.
+Lohkoketjuteknologioita ollaan pidetty arvostettuna yksityisyyden säilöjänä \parencite{de2016interplay}.
+Kuitenkin kolmannen osapuolen web-jäljittäjät ovat havainnnoineet kryptovaluuttojen deanonymisoituja käyttäjiä. Jäljittäjät hakevat käyttäjän identiteetin ja ostohistorian verkkokaupoista. Yleensä jäljittäjillä on tarpeeksi tietoa, jotta pystyvät tunnistamaam tietyn transaktion käyttäjän identiteetin mukana. \parencite{goldfeder2017cookie}
+Yleisesti uskotaan että lohkoketju on turvallinen, koska transaktiot suoritetaan generoiduilla osoitteilla eikä oikeilla identiteeteillä.
 Ollaan näytetty etteivät lohkoketjutransaktiot takaa yksityisyyttä, koska transaktioiden saldot ja arvot on kaikkien saatavilla julkisista avaimista huolimatta \parencite{kosba2016hawk}.
 
-On myös uhkia, jotka perustuu lohkoketjujen toimintaan. Yksi tietoturvallisuutta uhkaava hyökkäys on 51\% hyökkäys. 51\% hyökkäyksessa loujija omistaa yli puolet lohkoketjuverkon nodejen laskentatehosta. Tällöin kyseinen louhija pystyy dominoimaan järjestelmää mitä tulee transaktioiden luontiin, hyväksymiseen ja varmentamiseen tulee ja täten lisää vilpillisten transaktioden määrää.
+On myös uhkia, jotka perustuu lohkoketjujen toimintaan. Yksi tietoturvallisuutta uhkaava hyökkäys on 51\% hyökkäys. 51\% hyökkäyksessä louhija omistaa yli puolet lohkoketjuverkon nodejen laskentatehosta. Tällöin kyseinen louhija pystyy dominoimaan järjestelmää mitä tulee transaktioiden luontiin, hyväksymiseen ja varmentamiseen tulee ja täten lisää vilpillisten transaktioden määrää.
 
 Itsekkään louhijan hyökkäys on toinen yleinen hyökkäys. Hyökkäyksessä louhija generoi kaksi lohkoa, mutta ei julkaise niitä muille lohkoketjuverkon nodeille. Itsekäs louhija julkaisee lohkot vasta kuin lohkoketjuverkon muut nodet ovat liittäneet uuden lohkon ketjuun. Tällöin itsekkäällä louhijalla on lohkoketjun pisin ketju, jolloin aikaisemmin julkaistu lohko poistetaan ketjusta. Itsekäs louhija saa tällöin huomattavasti enemmän louhintapalkkiota \parencite{zheng2017overview}. 
 
@@ -382,7 +402,8 @@ Itsekkään louhijan hyökkäys on toinen yleinen hyökkäys. Hyökkäyksessä l
  \chapter{Yhteenveto}
  
  Lohkoketjuissa on vielä paljon ongelmia, mutta suurimpaan osaan on joitakin ratkaisuja.
- Konsensus-algoritmit ovat merkittävässä osassa lohkoketjuteknologioiden tehokkuudessa ja PoP, Paxos, PoAH vaikuttaa olevan merkittävässä osassa lohkoketjujen kehitystä.
+ Konsensus-algoritmit ovat merkittävässä osassa lohkoketjuteknologioiden tehokkuudessa.
+ PoP, Paxos, PoAH vaikuttavat olevan merkittävässä osassa lohkoketjujen kehitystä.
  
  
  
